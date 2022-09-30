@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"database/sql"
@@ -11,7 +11,12 @@ import (
 
 var counts int64
 
-func GetData(db *sql.DB, lesson string) ([]obj, error) {
+type obj struct {
+	Term string
+	Def  string
+}
+
+func GetLesson(db *sql.DB, lesson string) ([]obj, error) {
 	var data []obj
 	var o obj
 	rows, err := db.Query(fmt.Sprintf(`SELECT "term", "def" FROM %s`, lesson))

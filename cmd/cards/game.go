@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 	"time"
+
+	"github.com/lukas-blaha/quickle/pkg/db"
 )
 
 func SelectLesson() string {
@@ -41,7 +43,7 @@ func PlayCards(conn *sql.DB, lesson string) {
 	var c, i int
 	ask := true
 
-	data, err := GetData(conn, lesson)
+	data, err := db.GetLesson(conn, lesson)
 	if err != nil {
 		log.Fatal(err)
 	}

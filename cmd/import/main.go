@@ -12,9 +12,4 @@ func main() {
 	if conn == nil {
 		log.Panic("Can't connect to Postgres!")
 	}
-
-	for {
-		lesson := SelectLesson()
-		PlayCards(conn, lesson)
-	}
 }
