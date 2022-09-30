@@ -1,4 +1,4 @@
-module github.com/lukas-blaha/quick-learning
+module github.com/lukas-blaha/quickle
 
 go 1.19
 
