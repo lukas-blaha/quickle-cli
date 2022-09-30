@@ -11,10 +11,10 @@ import (
 
 var counts int64
 
-func GetData(db *sql.DB) ([]obj, error) {
+func GetData(db *sql.DB, lesson string) ([]obj, error) {
 	var data []obj
 	var o obj
-	rows, err := db.Query(`SELECT "term", "def" FROM "lesson01"`)
+	rows, err := db.Query(fmt.Sprintf(`SELECT "term", "def" FROM %s`, lesson))
 	if err != nil {
 		return nil, err
 	}
