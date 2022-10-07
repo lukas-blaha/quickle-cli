@@ -11,31 +11,6 @@ import (
 
 var counts int64
 
-type obj struct {
-	Term string
-	Def  string
-}
-
-func GetLesson(db *sql.DB, lesson string) ([]obj, error) {
-	var data []obj
-	var o obj
-	rows, err := db.Query(fmt.Sprintf(`SELECT "term", "def" FROM %s`, lesson))
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	for rows.Next() {
-		err = rows.Scan(&o.Term, &o.Def)
-		if err != nil {
-			return nil, err
-		}
-
-		data = append(data, o)
-	}
-
-	return data, nil
-}
-
 func OpenDB(dsn string) (*sql.DB, error) {
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
@@ -51,7 +26,6 @@ func OpenDB(dsn string) (*sql.DB, error) {
 }
 
 func ConnectToDB() *sql.DB {
-	// dsn := os.Getenv("DSN")
 	dsn := fmt.Sprintln("host=localhost port=5432 user=postgres password=postgres dbname=quizlet sslmode=disable")
 
 	for {

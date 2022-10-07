@@ -6,18 +6,27 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/lukas-blaha/quickle/pkg/db"
 )
 
-func SelectLesson() string {
-	choices := []string{"lesson01"}
-
+func SelectLesson(choices []string) string {
 	sc := bufio.NewScanner(os.Stdin)
 
 	printMessage(choices)
 	for sc.Scan() {
+		if isNumeric(sc.Text()) {
+			n, err := strconv.ParseInt(sc.Text(), 10, 64)
+			if err != nil {
+				log.Fatal(err)
+			}
+			if int(n) <= len(choices) {
+				return choices[n-1]
+			}
+		}
+
 		for _, l := range choices {
 			if sc.Text() == l {
 				return l
@@ -32,10 +41,11 @@ func SelectLesson() string {
 
 func printMessage(lessons []string) {
 	CleanPrint("Hi, welcome to quickle cards.")
-	fmt.Printf("\nSelect study set:\n")
-	for _, l := range lessons {
-		fmt.Printf(" - %s\n\nSelect: ", l)
+	fmt.Printf("\nSelect study set:\n\n")
+	for i, l := range lessons {
+		fmt.Printf(" %d. %s\n\n", i+1, l)
 	}
+	fmt.Printf("Select: ")
 }
 
 func PlayCards(conn *sql.DB, lesson string) {

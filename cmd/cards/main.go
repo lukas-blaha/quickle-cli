@@ -13,8 +13,13 @@ func main() {
 		log.Panic("Can't connect to Postgres!")
 	}
 
+	choices, err := db.GetStudySets(conn)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	for {
-		lesson := SelectLesson()
+		lesson := SelectLesson(choices)
 		PlayCards(conn, lesson)
 	}
 }
