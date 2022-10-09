@@ -1,52 +1,14 @@
 package main
 
 import (
-	"bufio"
 	"database/sql"
 	"fmt"
 	"log"
-	"os"
-	"strconv"
 	"time"
 
 	"github.com/lukas-blaha/quickle/pkg/db"
+	"github.com/lukas-blaha/quickle/pkg/game"
 )
-
-func SelectLesson(choices []string) string {
-	sc := bufio.NewScanner(os.Stdin)
-
-	printMessage(choices)
-	for sc.Scan() {
-		if isNumeric(sc.Text()) {
-			n, err := strconv.ParseInt(sc.Text(), 10, 64)
-			if err != nil {
-				log.Fatal(err)
-			}
-			if int(n) <= len(choices) {
-				return choices[n-1]
-			}
-		}
-
-		for _, l := range choices {
-			if sc.Text() == l {
-				return l
-			}
-		}
-		CleanPrint("Incorrect option, please try again...")
-		time.Sleep(time.Second * 1)
-		printMessage(choices)
-	}
-	return ""
-}
-
-func printMessage(lessons []string) {
-	CleanPrint("Hi, welcome to quickle cards.")
-	fmt.Printf("\nSelect study set:\n\n")
-	for i, l := range lessons {
-		fmt.Printf(" %d. %s\n\n", i+1, l)
-	}
-	fmt.Printf("Select: ")
-}
 
 func PlayCards(conn *sql.DB, lesson string) {
 	var t string
@@ -58,12 +20,12 @@ func PlayCards(conn *sql.DB, lesson string) {
 		log.Fatal(err)
 	}
 
-	CleanPrint(" n - next")
+	game.CleanPrint(" n - next")
 	fmt.Println(" p - previous")
 	fmt.Println(" e - exit")
 	time.Sleep(time.Second * 2)
 	// at start print first "term"
-	CleanPrint(data[i].Term)
+	game.CleanPrint(data[i].Term)
 	for {
 		if ask {
 			fmt.Scanln(&t)
@@ -74,10 +36,10 @@ func PlayCards(conn *sql.DB, lesson string) {
 		// counter "c": even => term, odd => def
 		case t == "" && c%2 == 0:
 			// if only enter key sent and "term" is active, then print "def"
-			CleanPrint(data[i].Def)
+			game.CleanPrint(data[i].Def)
 		case t == "" && c%2 == 1:
 			// if only enter key sent and "def" is active, then print "term"
-			CleanPrint(data[i].Term)
+			game.CleanPrint(data[i].Term)
 		case t == "n" && i <= len(data)-2:
 			// if "n" key is sent, then go to the next entry
 			ask = false

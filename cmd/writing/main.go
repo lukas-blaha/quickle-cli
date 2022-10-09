@@ -21,6 +21,7 @@ func main() {
 
 	for {
 		lesson := game.SelectLesson(choices)
-		PlayCards(conn, lesson)
+		PlayWriting(conn, lesson)
+		// time.Sleep(time.Second * 5)
 	}
 }
