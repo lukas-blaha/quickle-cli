@@ -1,4 +1,4 @@
-module github.com/lukas-blaha/quickle
+module github.com/lukas-blaha/quickle-cli
 
 go 1.19
 
